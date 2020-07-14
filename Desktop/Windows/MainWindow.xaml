@@ -1,0 +1,306 @@
+﻿<Window x:Class="LoRHelper.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="LoR Helper"    
+    Height="600" 
+    Width="225" 
+    Topmost="True" 
+    MaxWidth="300" 
+    MaxHeight="1080" 
+    MinWidth="150" 
+    MinHeight="40"
+    WindowStyle="None" 
+    Background="#FF1E1E1E" 
+    Icon="/Resources/LoRHelperIcon192x192.ico"
+    MouseLeftButtonDown="DragWindow"
+    WindowStartupLocation="Manual" Left="5" Top="10">
+    <!---Grid-->
+    <Grid>
+        <!---Rows.-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="16"/>
+        </Grid.RowDefinitions>
+        <!---Dock Top.-->
+        <DockPanel Grid.Row="0">
+            <!---Close button.-->
+            <Button Width="16" Height="16" DockPanel.Dock="Right" Cursor="No" Content="X" Click="CloseButton" />
+            <!---Collapsed/Minimizer button.-->
+            <Button Width="16" Height="16" DockPanel.Dock="Right" Content="-" Click="CollapseButton" />
+            <!---Opponent window button.-->
+            <Button ToolTip="Show/Close Opponent Window." Width="16" Height="16" DockPanel.Dock="Left" Content="O" Click="OpponentWindowButton" />
+            <!---Title app.-->
+            <TextBlock HorizontalAlignment="Center" Foreground="#FFEDECEC">LoR Helper</TextBlock>
+        </DockPanel>
+        <!---Deck Code.-->
+        <TextBlock Grid.Row="1" FontSize="8" Name="TextDeckCode" ToolTip="Click to copy in clipboard."
+                   Foreground="#FFEDECEC" HorizontalAlignment="Center" Text="Deck Code" Cursor="Hand" 
+                   MouseLeftButtonDown="CopyClipBoard"/>
+        <!---Tabs.-->
+        <TabControl Grid.Row="2"  Margin="1" Background="#FF1E1E1E" Padding="1" FontWeight="Bold">
+            <!---Deck List.-->
+            <TabItem ToolTip="Show deck list playing. Press D for quick access." Header="_Deck" Foreground="#FFEDECEC">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ListBox x:Name="ListDeck" Background="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Button Padding="5,2" Click="ClickMakeCardModal">
+                                        <Button.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FF1E1E1E" Offset="1"/>
+                                                <GradientStop Color="{Binding Region}" Offset="0"/>
+                                            </LinearGradientBrush>
+                                        </Button.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="0"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" BorderBrush="#FFEDECEC" BorderThickness="1" CornerRadius="6">
+                                                <TextBlock Text="{Binding Cost}" Padding="4,2" Foreground="#FFEDECEC">
+                                                    <TextBlock.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FF1E1E1E"/>
+                                                            <GradientStop Color="Blue" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </TextBlock.Background>
+                                                </TextBlock>
+                                             </Border>
+                                            <Border Grid.Column="1">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding Link}" Stretch="UniformToFill" Opacity="0.5" Viewbox="0,0,1,0.5">
+                                                        <ImageBrush.Transform>
+                                                            <TransformGroup>
+                                                                <ScaleTransform ScaleX="1.15"/>
+                                                                <SkewTransform/>
+                                                                <RotateTransform/>
+                                                                <TranslateTransform X="-10" Y="0"/>
+                                                            </TransformGroup>
+                                                        </ImageBrush.Transform>
+                                                    </ImageBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="{Binding Name}" Padding="4,2" HorizontalAlignment="Center" Foreground="#FFEDECEC"/>
+                                            </Border>
+                                            <Border Grid.Column="2" BorderBrush="#FF1E1E1E" BorderThickness="1" CornerRadius="6">
+                                                <Image Source="{Binding Icon}" Width="16" Height="16" />
+                                            </Border>
+                                            <TextBlock Grid.Column="3" Focusable="False" Height="0" IsEnabled="False" Visibility="Hidden" Text="{Binding Link}"/>
+                                        </Grid>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </TabItem>
+            <!---Track list cards.-->
+            <TabItem ToolTip="Show tracking cards. Press T for quick access." Header="_Tracker" Foreground="#FFEDECEC">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ListBox x:Name="TrackDeck" Background="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Button Padding="5,2" Click="ClickMakeCardModal">
+                                        <Button.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FF1E1E1E" Offset="1"/>
+                                                <GradientStop Color="{Binding Region}" Offset="0"/>
+                                            </LinearGradientBrush>
+                                        </Button.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="0"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" BorderBrush="#FFEDECEC" BorderThickness="1" CornerRadius="6">
+                                                <TextBlock Text="{Binding Cost}" Padding="4,2" Foreground="#FFEDECEC">
+                                                    <TextBlock.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FF1E1E1E"/>
+                                                            <GradientStop Color="Blue" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </TextBlock.Background>
+                                                </TextBlock>
+                                            </Border>
+                                            <Border Grid.Column="1">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding Link}" Stretch="UniformToFill" Opacity="0.5" Viewbox="0,0,1,0.5">
+                                                        <ImageBrush.Transform>
+                                                            <TransformGroup>
+                                                                <ScaleTransform ScaleX="1.15"/>
+                                                                <SkewTransform/>
+                                                                <RotateTransform/>
+                                                                <TranslateTransform X="-10" Y="0"/>
+                                                            </TransformGroup>
+                                                        </ImageBrush.Transform>
+                                                    </ImageBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="{Binding Name}" Padding="4,2" HorizontalAlignment="Center" Foreground="#FFEDECEC"/>
+                                            </Border>
+                                            <Border Grid.Column="2" BorderBrush="#FF1E1E1E" BorderThickness="1" CornerRadius="6">
+                                                <Image Source="{Binding Type}" Width="16" Height="16" />
+                                            </Border>
+                                            <TextBlock Grid.Column="3" Focusable="False" Height="0" IsEnabled="False" Visibility="Hidden" Text="{Binding Link}"/>
+                                        </Grid>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </TabItem>
+            <!---Graveyard track.-->
+            <TabItem ToolTip="Show cards in graveyard. Press G for quick access." Header="_Graveyard" Foreground="#FFEDECEC">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <ListBox x:Name="Graveyard" Background="Transparent" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="Focusable" Value="False"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Button Padding="5,2" Click="ClickMakeCardModal">
+                                        <Button.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <LinearGradientBrush.RelativeTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <SkewTransform CenterY="0.5" CenterX="0.5"/>
+                                                        <RotateTransform Angle="90" CenterY="0.5" CenterX="0.5"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </LinearGradientBrush.RelativeTransform>
+                                                <GradientStop Color="#FF1E1E1E" Offset="1"/>
+                                                <GradientStop Color="{Binding Region}" Offset="0"/>
+                                            </LinearGradientBrush>
+                                        </Button.Background>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="150" />
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="0"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" BorderBrush="#FFEDECEC" BorderThickness="1" CornerRadius="6">
+                                                <TextBlock Text="{Binding Cost}" Padding="4,2" Foreground="#FFEDECEC">
+                                                    <TextBlock.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FF1E1E1E"/>
+                                                            <GradientStop Color="Blue" Offset="1"/>
+                                                        </LinearGradientBrush>
+                                                    </TextBlock.Background>
+                                                </TextBlock>
+                                            </Border>
+                                            <Border Grid.Column="1">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding Link}" Stretch="UniformToFill" Opacity="0.5" Viewbox="0,0,1,0.5">
+                                                        <ImageBrush.Transform>
+                                                            <TransformGroup>
+                                                                <ScaleTransform ScaleX="1.15"/>
+                                                                <SkewTransform/>
+                                                                <RotateTransform/>
+                                                                <TranslateTransform X="-10" Y="0"/>
+                                                            </TransformGroup>
+                                                        </ImageBrush.Transform>
+                                                    </ImageBrush>
+                                                </Border.Background>
+                                                <TextBlock Text="{Binding Name}" Padding="4,2" HorizontalAlignment="Center" Foreground="#FFEDECEC"/>
+                                            </Border>
+                                            <Border Grid.Column="2" BorderBrush="#FF1E1E1E" BorderThickness="1" CornerRadius="6">
+                                                <Image Source="{Binding Type}" Width="16" Height="16" />
+                                            </Border>
+                                            <TextBlock Grid.Column="3" Focusable="False" Height="0" IsEnabled="False" Visibility="Hidden" Text="{Binding Link}"/>
+                                        </Grid>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+            </TabItem>
+            <!---Configuration-->
+            <TabItem Header="_Config" ToolTip="Show config App. Press C for quick access." Foreground="#FFEDECEC">
+                <StackPanel HorizontalAlignment="Left" 
+                            Margin="10" 
+                            VerticalAlignment="Top" 
+                            Width="250"
+                            Height="250"
+                            Background="#FF1E1E1E">
+                    <TextBlock Margin="10" Name="VersionDataBase" ToolTip="Version of the current DataBase." Foreground="#FFEDECEC" Text="VersionDB : Error" HorizontalAlignment="Left" />
+                    <TextBlock Margin="10" Name="VersionAppication" ToolTip="Version of the Aplication." Foreground="#FFEDECEC" Text="VersionAPP : Error" HorizontalAlignment="Left" />
+                    <Grid ToolTip="Selected language for card info." Margin="5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock ToolTip="This option change language of window card info." Grid.Column="0" Foreground="#FFEDECEC" HorizontalAlignment="Center" VerticalAlignment="Center">Partial Language:</TextBlock>
+                        <ComboBox Grid.Column="1" x:Name="ChoosenLanguage" SelectionChanged="LanguageSelectionChanged" BorderThickness="0" BorderBrush="{x:Null}" Foreground="#FFEDECEC" Style="{StaticResource ComboBoxTest2}">
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">English (United States)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">German (Germany)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Spanish (Spain)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Spanish (Mexico)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">French (France)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Italian (Italy)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Japanese (Japan)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Korean (Korea)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Polish (Poland)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Portuguese (Brazil)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Turkish (Turkey)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Russian (Russia)</ComboBoxItem>
+                            <ComboBoxItem BorderThickness="0" Foreground="#FFEDECEC" Background="#FF3E3E3F">Chinese (Taiwan)</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <!--Dock Bottom-->
+        <DockPanel Grid.Row="3" Background="#FF191919">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Name="CardsInTable" ToolTip="Your Cards on Board." Foreground="#FFEDECEC" Text="Board" HorizontalAlignment="Center" Grid.Column="0" />
+                <TextBlock Name="CardsInHand" ToolTip="Your Cards in Hand." Foreground="#FFEDECEC"  Text="Hand" HorizontalAlignment="Center" Grid.Column="1" />
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

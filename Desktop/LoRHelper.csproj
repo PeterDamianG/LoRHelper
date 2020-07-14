@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>0.1.0</Version>
+    <Authors>Peter DG</Authors>
+    <Description>This app is a deck tracker and helper for Legends Of Runeterra.</Description>
+    <Copyright>© 2020 Copyright PeterDG. All rights reserved. All trademarks are property of their respective owners in the US and other countries.</Copyright>
+    <PackageLicenseFile>License CC 4.0.txt</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/PeterDamianG/LoRHelper</PackageProjectUrl>
+    <PackageIcon>LoRHelperIcon64x64.png</PackageIcon>
+    <RepositoryUrl>https://github.com/PeterDamianG/LoRHelper</RepositoryUrl>
+    <RepositoryType>Public</RepositoryType>
+    <PackageTags>LoR, Legends of Runeterra, C#, Track, Tracker, Cards, Card.</PackageTags>
+    <PackageReleaseNotes>First version.</PackageReleaseNotes>
+    <AssemblyVersion>0.0.1.0</AssemblyVersion>
+    <FileVersion>0.0.1.0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\1.png" />
+    <None Remove="Resources\2.png" />
+    <None Remove="Resources\3.png" />
+    <None Remove="Resources\ability.png" />
+    <None Remove="Resources\Error.png" />    <None Remove="Resources\LorHelperIcon192x192.ico" />
+    <None Remove="Resources\spell.png" />
+    <None Remove="Resources\unit.png" />
+    <None Include="License CC 4.0.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="Resources\LoRHelperIcon64x64.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\1.png" />
+    <Resource Include="Resources\2.png" />
+    <Resource Include="Resources\3.png" />
+    <Resource Include="Resources\Ability.png" />
+    <Resource Include="Resources\Error.png" />
+    <Resource Include="Resources\LoRHelperIcon192x192.ico" />
+    <Resource Include="Resources\Spell.png" />
+    <Resource Include="Resources\Unit.png" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <ApplicationIcon>Resources\LorHelperIcon192x192.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Resources\LorHelperIcon192x192.ico" />
+  </ItemGroup>
+
+</Project>
